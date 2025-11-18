@@ -29,6 +29,9 @@ class Settings(BaseSettings):
 
     # Anthropic Claude API
     ANTHROPIC_API_KEY: str = ""
+    ANTHROPIC_MODEL: str = "claude-3-5-sonnet-20241022"
+    ANTHROPIC_MAX_TOKENS: int = 4096
+    ANTHROPIC_TEMPERATURE: float = 0.0
 
     # CORS
     ALLOWED_ORIGINS: str = "http://localhost:5173,http://localhost:3000"

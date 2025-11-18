@@ -21,6 +21,7 @@ from app.services.analysis.base import (
 from app.services.analysis.security import security_analyzer
 from app.services.analysis.quality import quality_analyzer
 from app.services.analysis.complexity import complexity_analyzer
+from app.services.analysis.ai_reviewer import ai_reviewer
 
 
 class ReviewService:
@@ -101,11 +102,21 @@ class ReviewService:
             workspace = create_temp_workspace()
             write_files_to_workspace(python_files, workspace)
 
-            # Run analyzers in parallel
+            # Prepare PR context for AI reviewer
+            pr_context = {
+                "title": pull_request.title,
+                "description": pull_request.description,
+                "author": pull_request.author,
+                "base_branch": pull_request.base_branch,
+                "head_branch": pull_request.head_branch,
+            }
+
+            # Run analyzers in parallel (including AI reviewer)
             results = await asyncio.gather(
                 security_analyzer.analyze(python_files, workspace),
                 quality_analyzer.analyze(python_files, workspace),
                 complexity_analyzer.analyze(python_files, workspace),
+                ai_reviewer.analyze(python_files, workspace, pr_context),
                 return_exceptions=True,
             )
 
