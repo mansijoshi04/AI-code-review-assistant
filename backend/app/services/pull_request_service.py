@@ -87,10 +87,16 @@ class PullRequestService:
         db.commit()
         db.refresh(pull_request)
 
-        # TODO: In Sprint 3, trigger automatic code review here
-        print(
-            f"PR #{pull_request.pr_number} stored. Review will be triggered in Sprint 3."
-        )
+        # Trigger automatic code review
+        try:
+            # Import here to avoid circular dependency
+            from app.services.review_service import review_service
+
+            user = repository.user  # Get user from repository relationship
+            await review_service.create_review(pull_request, user, db)
+            print(f"PR #{pull_request.pr_number} stored. Code review triggered.")
+        except Exception as e:
+            print(f"Failed to trigger review for PR #{pull_request.pr_number}: {str(e)}")
 
         return pull_request
 
@@ -148,10 +154,16 @@ class PullRequestService:
         db.commit()
         db.refresh(pull_request)
 
-        # TODO: In Sprint 3, trigger new code review for updated PR
-        print(
-            f"PR #{pull_request.pr_number} updated. New review will be triggered in Sprint 3."
-        )
+        # Trigger new code review for updated PR
+        try:
+            # Import here to avoid circular dependency
+            from app.services.review_service import review_service
+
+            user = repository.user  # Get user from repository relationship
+            await review_service.create_review(pull_request, user, db)
+            print(f"PR #{pull_request.pr_number} updated. New code review triggered.")
+        except Exception as e:
+            print(f"Failed to trigger review for updated PR #{pull_request.pr_number}: {str(e)}")
 
         return pull_request
 

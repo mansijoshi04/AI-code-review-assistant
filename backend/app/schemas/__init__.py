@@ -30,6 +30,21 @@ from app.schemas.webhook import (
     PullRequestReviewWebhookPayload,
     PullRequestReviewCommentWebhookPayload,
 )
+from app.schemas.review import (
+    ReviewBase,
+    ReviewCreate,
+    ReviewUpdate,
+    ReviewResponse,
+    ReviewList,
+    ReviewStats,
+)
+from app.schemas.finding import (
+    FindingBase,
+    FindingCreate,
+    FindingUpdate,
+    FindingResponse,
+    FindingList,
+)
 
 __all__ = [
     # User schemas
@@ -56,4 +71,17 @@ __all__ = [
     "PullRequestWebhookPayload",
     "PullRequestReviewWebhookPayload",
     "PullRequestReviewCommentWebhookPayload",
+    # Review schemas
+    "ReviewBase",
+    "ReviewCreate",
+    "ReviewUpdate",
+    "ReviewResponse",
+    "ReviewList",
+    "ReviewStats",
+    # Finding schemas
+    "FindingBase",
+    "FindingCreate",
+    "FindingUpdate",
+    "FindingResponse",
+    "FindingList",
 ]
