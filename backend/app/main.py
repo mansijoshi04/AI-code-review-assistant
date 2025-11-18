@@ -3,6 +3,7 @@ AI Code Review Assistant API
 Main FastAPI application entry point.
 """
 
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
@@ -16,6 +17,23 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """
+    Lifespan context manager for startup and shutdown events.
+    """
+    # Startup
+    logger.info("Starting AI Code Review Assistant API")
+    logger.info(f"Environment: {settings.ENVIRONMENT}")
+    logger.info(f"Allowed origins: {settings.allowed_origins_list}")
+
+    yield
+
+    # Shutdown
+    logger.info("Shutting down AI Code Review Assistant API")
+
+
 # Create FastAPI application
 app = FastAPI(
     title="AI Code Review Assistant API",
@@ -23,6 +41,7 @@ app = FastAPI(
     version="1.0.0",
     docs_url="/docs",
     redoc_url="/redoc",
+    lifespan=lifespan,
 )
 
 # Configure CORS
@@ -33,20 +52,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-@app.on_event("startup")
-async def startup_event():
-    """Run on application startup."""
-    logger.info("Starting AI Code Review Assistant API")
-    logger.info(f"Environment: {settings.ENVIRONMENT}")
-    logger.info(f"Allowed origins: {settings.allowed_origins_list}")
-
-
-@app.on_event("shutdown")
-async def shutdown_event():
-    """Run on application shutdown."""
-    logger.info("Shutting down AI Code Review Assistant API")
 
 
 @app.get("/")
