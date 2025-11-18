@@ -7,7 +7,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
-from app.api import auth, repositories
+from app.api import auth, repositories, pull_requests, webhooks
 import logging
 
 # Configure logging
@@ -99,11 +99,11 @@ def api_health_check():
 # Include API routers
 app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
 app.include_router(repositories.router, prefix="/api/repositories", tags=["repositories"])
+app.include_router(pull_requests.router, prefix="/api", tags=["pull_requests"])
+app.include_router(webhooks.router, prefix="/api/webhooks", tags=["webhooks"])
 
 # TODO: Include additional routers in future sprints
-# app.include_router(pull_requests.router, prefix="/api/pulls", tags=["pull_requests"])
 # app.include_router(reviews.router, prefix="/api/reviews", tags=["reviews"])
-# app.include_router(webhooks.router, prefix="/api/webhooks", tags=["webhooks"])
 
 
 if __name__ == "__main__":

@@ -18,6 +18,18 @@ from app.schemas.repository import (
     RepositoryResponse,
     RepositoryList,
 )
+from app.schemas.pull_request import (
+    PullRequestBase,
+    PullRequestCreate,
+    PullRequestUpdate,
+    PullRequestResponse,
+    PullRequestList,
+)
+from app.schemas.webhook import (
+    PullRequestWebhookPayload,
+    PullRequestReviewWebhookPayload,
+    PullRequestReviewCommentWebhookPayload,
+)
 
 __all__ = [
     # User schemas
@@ -34,4 +46,14 @@ __all__ = [
     "RepositoryUpdate",
     "RepositoryResponse",
     "RepositoryList",
+    # Pull request schemas
+    "PullRequestBase",
+    "PullRequestCreate",
+    "PullRequestUpdate",
+    "PullRequestResponse",
+    "PullRequestList",
+    # Webhook schemas
+    "PullRequestWebhookPayload",
+    "PullRequestReviewWebhookPayload",
+    "PullRequestReviewCommentWebhookPayload",
 ]

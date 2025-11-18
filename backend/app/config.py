@@ -22,6 +22,10 @@ class Settings(BaseSettings):
     GITHUB_CLIENT_ID: str = ""
     GITHUB_CLIENT_SECRET: str = ""
     GITHUB_WEBHOOK_SECRET: str = ""
+    GITHUB_API_BASE_URL: str = "https://api.github.com"
+    GITHUB_OAUTH_AUTHORIZE_URL: str = "https://github.com/login/oauth/authorize"
+    GITHUB_OAUTH_TOKEN_URL: str = "https://github.com/login/oauth/access_token"
+    GITHUB_OAUTH_REDIRECT_URI: str = "http://localhost:5173/auth/github/callback"
 
     # Anthropic Claude API
     ANTHROPIC_API_KEY: str = ""
