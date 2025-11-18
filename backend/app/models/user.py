@@ -4,10 +4,9 @@ User model for storing GitHub user information.
 
 import uuid
 from sqlalchemy import Column, String, Integer, Text
-from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from app.database import Base
-from app.models.base import TimestampMixin
+from app.models.base import TimestampMixin, GUID
 
 
 class User(Base, TimestampMixin):
@@ -20,7 +19,7 @@ class User(Base, TimestampMixin):
 
     __tablename__ = "users"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(GUID, primary_key=True, default=uuid.uuid4)
     github_id = Column(Integer, unique=True, nullable=False, index=True)
     username = Column(String(255), nullable=False, index=True)
     email = Column(String(255), nullable=True)

@@ -13,9 +13,9 @@ from sqlalchemy import (
     UniqueConstraint,
     Numeric,
 )
-from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from app.database import Base
+from app.models.base import GUID
 
 
 class ReviewMetrics(Base):
@@ -31,9 +31,9 @@ class ReviewMetrics(Base):
         UniqueConstraint("repository_id", "date", name="uq_repo_metrics_date"),
     )
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(GUID, primary_key=True, default=uuid.uuid4)
     repository_id = Column(
-        UUID(as_uuid=True),
+        GUID,
         ForeignKey("repositories.id", ondelete="CASCADE"),
         nullable=False,
         index=True,

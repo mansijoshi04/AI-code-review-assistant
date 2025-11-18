@@ -5,9 +5,9 @@ Review model for storing code review results.
 import uuid
 from datetime import datetime
 from sqlalchemy import Column, String, Integer, Text, ForeignKey, DateTime
-from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from app.database import Base
+from app.models.base import GUID
 
 
 class Review(Base):
@@ -21,9 +21,9 @@ class Review(Base):
 
     __tablename__ = "reviews"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(GUID, primary_key=True, default=uuid.uuid4)
     pull_request_id = Column(
-        UUID(as_uuid=True),
+        GUID,
         ForeignKey("pull_requests.id", ondelete="CASCADE"),
         nullable=False,
         index=True,

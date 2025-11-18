@@ -4,10 +4,9 @@ PullRequest model for storing GitHub pull request information.
 
 import uuid
 from sqlalchemy import Column, String, Integer, Text, ForeignKey, UniqueConstraint
-from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from app.database import Base
-from app.models.base import TimestampMixin
+from app.models.base import TimestampMixin, GUID
 
 
 class PullRequest(Base, TimestampMixin):
@@ -24,9 +23,9 @@ class PullRequest(Base, TimestampMixin):
         UniqueConstraint("repository_id", "pr_number", name="uq_repo_pr_number"),
     )
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(GUID, primary_key=True, default=uuid.uuid4)
     repository_id = Column(
-        UUID(as_uuid=True),
+        GUID,
         ForeignKey("repositories.id", ondelete="CASCADE"),
         nullable=False,
         index=True,

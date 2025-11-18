@@ -5,9 +5,9 @@ Finding model for storing individual code review findings.
 import uuid
 from datetime import datetime
 from sqlalchemy import Column, String, Integer, Text, ForeignKey, DateTime
-from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from app.database import Base
+from app.models.base import GUID
 
 
 class Finding(Base):
@@ -20,9 +20,9 @@ class Finding(Base):
 
     __tablename__ = "findings"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(GUID, primary_key=True, default=uuid.uuid4)
     review_id = Column(
-        UUID(as_uuid=True),
+        GUID,
         ForeignKey("reviews.id", ondelete="CASCADE"),
         nullable=False,
         index=True,
