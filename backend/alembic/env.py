@@ -17,12 +17,12 @@ from app.database import Base
 from app.config import settings
 
 # Import all models here so Alembic can detect them
-# TODO: Uncomment these as models are created in Sprint 1
-# from app.models.user import User
-# from app.models.repository import Repository
-# from app.models.pull_request import PullRequest
-# from app.models.review import Review
-# from app.models.finding import Finding
+from app.models.user import User
+from app.models.repository import Repository
+from app.models.pull_request import PullRequest
+from app.models.review import Review
+from app.models.finding import Finding
+from app.models.review_metrics import ReviewMetrics
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
