@@ -4,6 +4,8 @@
 
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { Toaster } from './components/ui/sonner'
+import { ErrorBoundary } from './components/ErrorBoundary'
 import { Layout } from './components/layout/Layout'
 import { ProtectedRoute } from './components/ProtectedRoute'
 import { Login } from './pages/Login'
@@ -27,77 +29,80 @@ const queryClient = new QueryClient({
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <Routes>
-          {/* Public routes */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/auth/github/callback" element={<GitHubCallback />} />
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <Routes>
+            {/* Public routes */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/auth/github/callback" element={<GitHubCallback />} />
 
-          {/* Protected routes with layout */}
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
-                <Layout>
-                  <Dashboard />
-                </Layout>
-              </ProtectedRoute>
-            }
-          />
+            {/* Protected routes with layout */}
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <Dashboard />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
 
-          <Route
-            path="/repositories"
-            element={
-              <ProtectedRoute>
-                <Layout>
-                  <Repositories />
-                </Layout>
-              </ProtectedRoute>
-            }
-          />
+            <Route
+              path="/repositories"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <Repositories />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
 
-          <Route
-            path="/repositories/:repositoryId"
-            element={
-              <ProtectedRoute>
-                <Layout>
-                  <PullRequests />
-                </Layout>
-              </ProtectedRoute>
-            }
-          />
+            <Route
+              path="/repositories/:repositoryId"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <PullRequests />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
 
-          <Route
-            path="/reviews"
-            element={
-              <ProtectedRoute>
-                <Layout>
-                  <Reviews />
-                </Layout>
-              </ProtectedRoute>
-            }
-          />
+            <Route
+              path="/reviews"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <Reviews />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
 
-          <Route
-            path="/reviews/:reviewId"
-            element={
-              <ProtectedRoute>
-                <Layout>
-                  <ReviewDetail />
-                </Layout>
-              </ProtectedRoute>
-            }
-          />
+            <Route
+              path="/reviews/:reviewId"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <ReviewDetail />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
 
-          {/* Redirect root to dashboard if authenticated, otherwise to login */}
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            {/* Redirect root to dashboard if authenticated, otherwise to login */}
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
-          {/* 404 - redirect to dashboard */}
-          <Route path="*" element={<Navigate to="/dashboard" replace />} />
-        </Routes>
-      </BrowserRouter>
-    </QueryClientProvider>
+            {/* 404 - redirect to dashboard */}
+            <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          </Routes>
+          <Toaster />
+        </BrowserRouter>
+      </QueryClientProvider>
+    </ErrorBoundary>
   )
 }
 
