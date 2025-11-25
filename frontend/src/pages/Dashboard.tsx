@@ -2,10 +2,16 @@
  * Dashboard page showing overview statistics.
  */
 
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuthStore } from '../store/authStore'
 import { useReviewStats } from '../hooks/useReviews'
 import { useRepositories } from '../hooks/useRepositories'
+import {
+  useReviewTrends,
+  useFindingsDistribution,
+  useRepositoryActivity,
+} from '../hooks/useAnalytics'
 import {
   Card,
   CardContent,
@@ -14,13 +20,22 @@ import {
   CardTitle,
 } from '../components/ui/card'
 import { Button } from '../components/ui/button'
+import { Tabs, TabsList, TabsTrigger } from '../components/ui/tabs'
 import { Code2, GitPullRequest, AlertTriangle, CheckCircle2, Loader2, TrendingUp } from 'lucide-react'
 import { formatNumber, getScoreColor } from '../lib/utils'
+import { ReviewTrendsChart } from '../components/charts/ReviewTrendsChart'
+import { FindingsDistributionChart } from '../components/charts/FindingsDistributionChart'
+import { RepositoryActivityChart } from '../components/charts/RepositoryActivityChart'
 
 export function Dashboard() {
   const { user } = useAuthStore()
+  const [trendPeriod, setTrendPeriod] = useState<'7d' | '30d' | '90d'>('30d')
+
   const { data: stats, isLoading: statsLoading } = useReviewStats()
   const { data: reposData, isLoading: reposLoading } = useRepositories()
+  const { data: trendsData, isLoading: trendsLoading } = useReviewTrends(trendPeriod)
+  const { data: distributionData, isLoading: distributionLoading } = useFindingsDistribution()
+  const { data: activityData, isLoading: activityLoading } = useRepositoryActivity(10)
 
   const isLoading = statsLoading || reposLoading
   const repositories = reposData?.repositories || []
@@ -197,6 +212,41 @@ export function Dashboard() {
               </CardContent>
             </Card>
           </div>
+
+          {/* Charts section */}
+          {(stats?.total_reviews || 0) > 0 && (
+            <>
+              {/* Trend period selector */}
+              <div className="flex items-center justify-between">
+                <h2 className="text-2xl font-bold">Analytics</h2>
+                <Tabs value={trendPeriod} onValueChange={(v) => setTrendPeriod(v as '7d' | '30d' | '90d')}>
+                  <TabsList>
+                    <TabsTrigger value="7d">7 days</TabsTrigger>
+                    <TabsTrigger value="30d">30 days</TabsTrigger>
+                    <TabsTrigger value="90d">90 days</TabsTrigger>
+                  </TabsList>
+                </Tabs>
+              </div>
+
+              {/* Review trends chart */}
+              <ReviewTrendsChart
+                data={trendsData?.trends || []}
+                isLoading={trendsLoading}
+              />
+
+              {/* Distribution and activity charts */}
+              <div className="grid gap-4 md:grid-cols-2">
+                <FindingsDistributionChart
+                  data={distributionData?.distribution || []}
+                  isLoading={distributionLoading}
+                />
+                <RepositoryActivityChart
+                  data={activityData?.repositories || []}
+                  isLoading={activityLoading}
+                />
+              </div>
+            </>
+          )}
         </>
       )}
 

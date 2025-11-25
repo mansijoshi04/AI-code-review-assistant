@@ -85,6 +85,44 @@ export interface ReviewStats {
   total_info_findings: number
 }
 
+export interface TrendDataPoint {
+  date: string
+  reviews: number
+  score: number
+  critical: number
+  warning: number
+  info: number
+}
+
+export interface ReviewTrendsResponse {
+  trends: TrendDataPoint[]
+  period: string
+}
+
+export interface FindingsDistribution {
+  category: string
+  count: number
+  critical: number
+  warning: number
+  info: number
+}
+
+export interface FindingsDistributionResponse {
+  distribution: FindingsDistribution[]
+}
+
+export interface RepositoryActivity {
+  repository_id: string
+  repository_name: string
+  review_count: number
+  avg_score: number
+  total_findings: number
+}
+
+export interface RepositoryActivityResponse {
+  repositories: RepositoryActivity[]
+}
+
 // API response types
 export interface PaginatedResponse<T> {
   total: number

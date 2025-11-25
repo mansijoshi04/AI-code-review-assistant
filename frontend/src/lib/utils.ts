@@ -16,8 +16,28 @@ export function cn(...inputs: ClassValue[]) {
 /**
  * Format a date to a human-readable string.
  */
-export function formatDate(date: string | Date): string {
+export function formatDate(
+  date: string | Date,
+  format?: 'short' | 'long' | 'MMM dd'
+): string {
   const d = typeof date === 'string' ? new Date(date) : date
+
+  if (format === 'MMM dd') {
+    return d.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+    })
+  }
+
+  if (format === 'long') {
+    return d.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    })
+  }
+
+  // Default format
   return d.toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'short',
