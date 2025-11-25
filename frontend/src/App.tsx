@@ -1,10 +1,22 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+/**
+ * Main App component with React Router configuration.
+ */
 
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { Layout } from './components/layout/Layout'
+import { ProtectedRoute } from './components/ProtectedRoute'
+import { Login } from './pages/Login'
+import { GitHubCallback } from './pages/GitHubCallback'
+import { Dashboard } from './pages/Dashboard'
+
+// Create QueryClient instance
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 5 * 60 * 1000, // 5 minutes
       retry: 1,
+      refetchOnWindowFocus: false,
     },
   },
 })
@@ -12,35 +24,31 @@ const queryClient = new QueryClient({
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="min-h-screen bg-background">
-        <div className="container mx-auto px-4 py-8">
-          <header className="mb-8">
-            <h1 className="text-4xl font-bold text-primary">
-              AI Code Review Assistant
-            </h1>
-            <p className="text-muted-foreground mt-2">
-              Sprint 0: Project Setup Complete
-            </p>
-          </header>
-          <main>
-            <div className="bg-card border border-border rounded-lg p-6 shadow-sm">
-              <h2 className="text-2xl font-semibold mb-4">Welcome!</h2>
-              <p className="text-muted-foreground">
-                The frontend development environment is set up and ready.
-              </p>
-              <div className="mt-6 space-y-2">
-                <p className="font-medium">Next Steps:</p>
-                <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
-                  <li>Sprint 1: Backend Foundation (Database Models & APIs)</li>
-                  <li>Sprint 2: GitHub Integration</li>
-                  <li>Sprint 3-4: Analysis Pipeline</li>
-                  <li>Sprint 5-7: Frontend Features</li>
-                </ul>
-              </div>
-            </div>
-          </main>
-        </div>
-      </div>
+      <BrowserRouter>
+        <Routes>
+          {/* Public routes */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/auth/github/callback" element={<GitHubCallback />} />
+
+          {/* Protected routes with layout */}
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <Dashboard />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Redirect root to dashboard if authenticated, otherwise to login */}
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+
+          {/* 404 - redirect to dashboard */}
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        </Routes>
+      </BrowserRouter>
     </QueryClientProvider>
   )
 }
