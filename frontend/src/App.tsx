@@ -9,6 +9,10 @@ import { ProtectedRoute } from './components/ProtectedRoute'
 import { Login } from './pages/Login'
 import { GitHubCallback } from './pages/GitHubCallback'
 import { Dashboard } from './pages/Dashboard'
+import { Repositories } from './pages/Repositories'
+import { PullRequests } from './pages/PullRequests'
+import { Reviews } from './pages/Reviews'
+import { ReviewDetail } from './pages/ReviewDetail'
 
 // Create QueryClient instance
 const queryClient = new QueryClient({
@@ -37,6 +41,50 @@ function App() {
               <ProtectedRoute>
                 <Layout>
                   <Dashboard />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/repositories"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <Repositories />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/repositories/:repositoryId"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <PullRequests />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/reviews"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <Reviews />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/reviews/:reviewId"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <ReviewDetail />
                 </Layout>
               </ProtectedRoute>
             }
